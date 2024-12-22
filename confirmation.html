@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation de Paiement</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes float-animation {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .gradient-bg {
+            background: linear-gradient(45deg, #000000 0%, #000000 100%);
+            background-size: 400% 400%;
+            animation: gradient-shift 15s ease infinite;
+        }
+
+        .floating-element {
+            animation: float-animation 4s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex items-center justify-center text-white p-4">
+    <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div class="absolute top-10 right-20 w-48 h-48 bg-purple-500 rounded-full opacity-20 floating-element"></div>
+        <div class="absolute bottom-20 left-10 w-72 h-72 bg-blue-400 rounded-full opacity-15 floating-element"></div>
+    </div>
+
+    <div class="relative z-10 w-full max-w-md bg-white/20 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/30">
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold text-white mb-2 tracking-wide">Paiement</h1>
+            <p class="text-white/80 text-lg">Confirmation de votre transaction</p>
+        </div>
+
+        <div class="bg-white/10 rounded-2xl p-6 mb-6 border border-white/20">
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <p class="text-white/70 uppercase text-xs tracking-wider">Opérateur</p>
+                    <p class="font-bold text-xl text-white" id="operatorName"></p>
+                </div>
+                <div class="text-right">
+                    <p class="text-white/70 uppercase text-xs tracking-wider">Montant</p>
+                    <p class="font-bold text-2xl text-green-400" id="amount"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white/10 rounded-2xl p-6 mb-6 flex justify-between items-center border border-white/20">
+            <div>
+                <p class="text-white/70 uppercase text-xs tracking-wider">Numéro de paiement</p>
+                <p class="font-bold text-xl text-white" id="paymentNumber"></p>
+            </div>
+            <button 
+                id="copyButton" 
+                class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-all"
+            >
+                Copier
+            </button>
+        </div>
+
+        <form id="confirmationForm">
+            <div class="mb-6">
+                <label class="block text-white/80 mb-2 uppercase text-xs tracking-wider">ID de transaction</label>
+                <input 
+                    type="text" 
+                    required 
+                    placeholder="Entrez l'ID de transaction"
+                    class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-white/80 mb-2 uppercase text-xs tracking-wider">Preuve de paiement</label>
+                <input 
+                    type="file" 
+                    required 
+                    accept="image/*"
+                    class="w-full file:mr-4 file:rounded-lg file:border-0 file:bg-white/20 file:px-4 file:py-2 file:text-white hover:file:bg-white/30"
+                >
+            </div>
+
+            <button 
+                type="submit" 
+                class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg uppercase tracking-wider font-bold transition-colors"
+            >
+                Confirmer
+            </button>
+        </form>
+
+        <div 
+            id="timer" 
+            class="text-center text-white/80 font-bold mt-6 text-lg tracking-wider"
+        ></div>
+    </div>
+
+    <script>
+        // Script identique à votre version précédente
+        const transactionData = JSON.parse(localStorage.getItem('transactionData'));
+
+        document.getElementById('operatorName').textContent = transactionData.operator;
+        document.getElementById('amount').textContent = transactionData.amount + ' FCFA';
+        document.getElementById('paymentNumber').textContent = transactionData.number;
+
+        document.getElementById('copyButton').addEventListener('click', () => {
+            navigator.clipboard.writeText(transactionData.number)
+                .then(() => {
+                    const button = document.getElementById('copyButton');
+                    button.textContent = 'Copié !';
+                    setTimeout(() => {
+                        button.textContent = 'Copier';
+                    }, 2000);
+                });
+        });
+
+        let timeLeft = 600;
+        const timerElement = document.getElementById('timer');
+        
+        const timerId = setInterval(() => {
+            timeLeft--;
+            const minutes = Math.floor(timeLeft / 70);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = 
+                `Temps restant: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerId);
+                alert('Temps écoulé ! La transaction a été annulée.');
+                window.location.href = 'index.html';
+            }
+        }, 1000);
+
+        document.getElementById('confirmationForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            clearInterval(timerId);
+            
+            transactionData.status = 'Confirmé';
+            const history = JSON.parse(localStorage.getItem('transactionHistory') || '[]');
+            history.unshift(transactionData);
+            localStorage.setItem('transactionHistory', JSON.stringify(history));
+
+            window.location.href = 'history.html';
+        });
+    </script>
+</body>
+</html>

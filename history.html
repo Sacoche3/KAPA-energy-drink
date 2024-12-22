@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historique des Recharges</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3b00ff;
+            --secondary-color: #ff000a;
+            --background-color: #a42bff;
+            --text-color: #ff0a00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--background-color), #e6e9f0);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            perspective: 1000px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 15px 35px rgba(50,50,93,.1), 0 5px 15px rgba(0,0,0,.07);
+            transform-style: preserve-3d;
+            transform: rotateX(10deg) scale(0.95);
+            transition: all 0.4s ease-in-out;
+            border: 1px solid rgba(255,255,255,0.18);
+            backdrop-filter: blur(10px);
+        }
+
+        .card:hover {
+            transform: rotateX(0) scale(1);
+            box-shadow: 0 20px 45px rgba(50,50,93,.2), 0 10px 25px rgba(0,0,0,.1);
+        }
+
+        .title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+            text-align: center;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-text 3s ease infinite;
+        }
+
+        @keyframes gradient-text {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .history-item {
+            background: linear-gradient(95deg, #f8f9fa, #f1f3f5);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 6px solid var(--primary-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .history-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .history-item:hover::before {
+            transform: translateX(100%);
+        }
+
+        .history-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .status {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            color: #666;
+        }
+
+        .detail-item {
+            background-color: rgba(255,255,255,0.7);
+            padding: 0.8rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .detail-item:hover {
+            transform: translateY(-5px);
+            background-color: rgba(255,255,255,0.9);
+        }
+
+        .detail-label {
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 2rem;
+            color: #888;
+            font-style: italic;
+        }
+
+        .button {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            margin-top: 1rem;
+            width: 100%;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 20px rgba(38,45,118,0.2);
+        }
+
+        .button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(38,45,118,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card animate__animated animate__fadeIn">
+            <h1 class="title animate__animated animate__pulse">Historique des Recharges</h1>
+
+            <div id="historyList" class="animate__animated animate__fadeInUp">
+                <!-- Les transactions seront insérées ici -->
+            </div>
+
+            <a href="recharge.html" class="button animate__animated animate__bounceIn">Nouvelle Recharge</a>
+        </div>
+    </div>
+
+    <script>
+        // Récupération de l'historique depuis localStorage
+        const history = JSON.parse(localStorage.getItem('transactionHistory') || '[]');
+        const historyList = document.getElementById('historyList');
+
+        if (history.length === 0) {
+            historyList.innerHTML = `
+                <div class="empty-message animate__animated animate__fadeIn">
+                    Aucune transaction n'a été effectuée
+                </div>
+            `;
+        } else {
+            history.forEach((transaction, index) => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item animate__animated animate__fadeInUp';
+                historyItem.style.animationDelay = `${index * 0.2}s`;
+                historyItem.innerHTML = `
+                    <div class="history-header">
+                        <div class="status">Cher utilisateur veuillez contacter le support pour approuvé votre paiement rapidement</div>
+                    </div>
+                    <div class="details">
+                        <div class="detail-item">
+                            <span class="detail-label">Montant</span>
+                            <span class="detail-value">${transaction.amount} FCFA</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Numéro</span>
+                            <span class="detail-value">${transaction.number}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Date</span>
+                            <span class="detail-value">${transaction.date}</span>
+                        </div>
+                    </div>
+                `;
+                historyList.appendChild(historyItem);
+            });
+        }
+    </script>
+</body>
+</html>

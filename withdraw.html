@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retrait - Kapa Energy Drink</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Reset et styles de base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #00529B, #007d4f);
+            min-height: 100vh;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        /* Layout Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header Styles */
+        .header {
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .logo {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+        }
+
+        /* Card Components */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Message Styles */
+        .message-container {
+            margin: 1rem 0;
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        .error, .success {
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .error {
+            background-color: rgba(255, 0, 0, 0.1);
+            color: #ff4444;
+        }
+
+        .success {
+            background-color: rgba(0, 255, 0, 0.1);
+            color: #00ff00;
+        }
+
+        /* Balance Section */
+        .balance-section {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .balance-label {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .balance-amount {
+            font-size: 3rem;
+            font-weight: 600;
+        }
+
+        /* Info Boxes */
+        .info-box {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin: 1.5rem 0;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Summary Box */
+        .summary-box {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+        }
+
+        .summary-total {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            font-weight: 600;
+        }
+
+        /* Bills Section */
+        .bills-section {
+            margin: 2rem 0;
+        }
+
+        .bills-title {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .bills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .bill-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: background 0.2s ease;
+        }
+
+        .bill-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .bill-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+
+        .bill-info {
+            flex: 1;
+        }
+
+        .bill-value {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 0.2rem;
+        }
+
+        .bill-count {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Buttons */
+        .btn-withdraw {
+            width: 100%;
+            padding: 1.2rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-withdraw:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .btn-withdraw:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* History Link */
+        .history-link {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .history-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            transition: background 0.2s ease;
+        }
+
+        .history-button:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .glass-card {
+                padding: 1rem;
+            }
+
+            .bills-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .balance-amount {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1 class="logo">kapa energy drink</h1>
+            <p class="subtitle">Service de retrait sécurisé</p>
+        </div>
+        
+        <!-- Main Content Card -->
+        <div class="glass-card">
+            <!-- Message Container -->
+            <div id="message" class="message-container"></div>
+
+            <!-- Balance Display -->
+            <div class="balance-section">
+                <p class="balance-label">Solde disponible</p>
+                <div class="balance-amount" id="current-balance">0 FCFA</div>
+            </div>
+
+            <!-- Info Boxes -->
+            <div class="info-box">
+                <i class="fas fa-info-circle"></i>
+                <span>Frais de retrait : 10% du montant</span>
+            </div>
+
+            <div class="info-box">
+                <i class="fas fa-exclamation-circle"></i>
+                <span>Limites : 1 000 - 800 000 FCFA</span>
+            </div>
+
+            <!-- Withdrawal Form -->
+            <div class="form-group">
+                <label class="form-label" for="amount">Montant à retirer</label>
+                <input class="form-input" type="number" id="amount" 
+                       min="1000" max="800000" 
+                       placeholder="Entrez le montant">
+            </div>
+
+            <!-- Summary Box -->
+            <div class="summary-box">
+                <div class="summary-item">
+                    <span>Montant demandé:</span>
+                    <span id="requested-amount">0 FCFA</span>
+                </div>
+                <div class="summary-item">
+                    <span>Frais (10%):</span>
+                    <span id="fees-amount">0 FCFA</span>
+                </div>
+                <div class="summary-item summary-total">
+                    <span>Total à débiter:</span>
+                    <span id="total-amount">0 FCFA</span>
+                </div>
+            </div>
+
+            <!-- Bills Grid -->
+            <div class="bills-section">
+                <h3 class="bills-title">
+                    <i class="fas fa-money-bill-wave"></i>
+                    Détail des coupures
+                </h3>
+                <div class="bills-grid">
+                    <!-- 10000 FCFA -->
+                    <div class="bill-card">
+                        <div class="bill-icon">
+                            <i class="fas fa-money-bill"></i>
+                        </div>
+                        <div class="bill-info">
+                            <div class="bill-value">10 000 FCFA</div>
+                            <div class="bill-count">× <span id="count-10000">0</span></div>
+                        </div>
+                    </div>
+                    <!-- Other denominations... -->
+                    <!-- Add similar bill-card divs for 5000, 2000, 1000, 500, 250, 100, 50, 25 FCFA -->
+                </div>
+            </div>
+
+            <!-- Withdrawal Code Input -->
+            <div class="form-group">
+                <label class="form-label" for="withdrawalCode">Code de retrait</label>
+                <input class="form-input" type="password" id="withdrawalCode" 
+                       placeholder="Entrez votre code">
+            </div>
+
+            <!-- Withdrawal Button -->
+            <button class="btn-withdraw" id="withdrawal-button" disabled>
+                <i class="fas fa-money-bill-wave"></i>
+                Effectuer le retrait
+            </button>
+        </div>
+
+        <!-- History Link -->
+        <div class="history-link">
+            <a href="historique_retrait.html" class="history-button">
+                <i class="fas fa-history"></i>
+                Historique des retraits
+            </a>
+        </div>
+    </div>
+
+    <!-- Firebase Setup -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js';
+        import { 
+            getAuth, 
+            onAuthStateChanged 
+        } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js';
+        import { 
+            getDatabase, 
+            ref, 
+            get,
+            set,
+            push,
+            runTransaction
+        } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js';
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCekNaQs88vn7Ed2IIO_fIrc3kk2lVfggM",
+            authDomain: "uber-10bff.firebaseapp.com",
+            databaseURL: "https://uber-10bff-default-rtdb.firebaseio.com",
+            projectId: "uber-10bff",
+            storageBucket: "uber-10bff.appspot.com",
+            messagingSenderId: "997089945771",
+            appId: "1:997089945771:web:55496eb4fb702eabce2fee"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        const auth = getAuth();
+
+        // Constants
+        const MIN_WITHDRAWAL = 1000;
+        const MAX_WITHDRAWAL = 800000;
+        const DENOMINATIONS = [10000, 5000, 2000, 1000, 500, 250, 100, 50, 25];
+
+        // Utility Functions
+        function formatAmount(amount) {
+            return amount.toLocaleString('fr-FR') + ' FCFA';
+        }
+
+        function calculateDenominations(amount) {
+            let remaining = amount;
+            const result = {};
+            
+            DENOMINATIONS.forEach(value => {
+                const count = Math.floor(remaining / value);
+                if (count > 0) {
+                    result[value] = count;
+                    remaining = remaining % value;
+                } else {
+                    result[value] = 0;
+                }
+            });
+
+            return result;
+        }
+
+        // UI Update Functions
+        function updateDenominationsDisplay(amount) {
+            const denominations = calculateDenominations(amount);
+            
+            DENOMINATIONS.forEach(value => {
+                const elementId = `count-${value}`;
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.textContent = denominations[value] || 0;
+                }
+            });
+        }
+
+        function showMessage(message, type = 'error') {
+            const messageDiv = document.getElementById('message');
+            if (messageDiv) {
+                messageDiv.innerHTML = `
+                    <p class="${type}">
+                        <i class="fas fa-${type === 'error' ? 'exclamation' : 'check'}-circle"></i>
+                        ${message}
+                    </p>`;
+            }
+        }
+
+        // Mise à jour du résumé du retrait
+        function updateWithdrawalSummary() {
+            const amountInput = document.getElementById('amount');
+            const amount = parseFloat(amountInput.value) || 0;
+            const fees = Math.round(amount * 0.10); // 10% de frais
+            const totalAmount = amount - fees;
+
+            document.getElementById('requested-amount').textContent = formatAmount(amount);
+            document.getElementById('fees-amount').textContent = formatAmount(fees);
+            document.getElementById('total-amount').textContent = formatAmount(totalAmount);
+
+            // Mise à jour des coupures
+            updateDenominationsDisplay(totalAmount);
+
+            // Validation du montant et activation/désactivation du bouton
+            const withdrawalButton = document.getElementById('withdrawal-button');
+            const withdrawalCode = document.getElementById('withdrawalCode').value;
+
+            if (amount < MIN_WITHDRAWAL) {
+                showMessage(`Le montant minimum de retrait est de ${formatAmount(MIN_WITHDRAWAL)}`);
+                withdrawalButton.disabled = true;
+            } else if (amount > MAX_WITHDRAWAL) {
+                showMessage(`Le montant maximum de retrait est de ${formatAmount(MAX_WITHDRAWAL)}`);
+                withdrawalButton.disabled = true;
+            } else if (!withdrawalCode) {
+                withdrawalButton.disabled = true;
+            } else {
+                document.getElementById('message').innerHTML = '';
+                withdrawalButton.disabled = false;
+            }
+        }
+
+        // Mise à jour du solde affiché
+        async function updateBalance(userId) {
+            try {
+                const balanceRef = ref(db, `users/${userId}/balance`);
+                const snapshot = await get(balanceRef);
+                const balance = snapshot.val() || 0;
+                document.getElementById('current-balance').textContent = formatAmount(balance);
+            } catch (error) {
+                console.error('Erreur lors de la mise à jour du solde:', error);
+                showMessage('Erreur lors de la mise à jour du solde');
+            }
+        }
+
+        // Vérification de la configuration du retrait
+        async function checkWithdrawalConfig() {
+            const user = auth.currentUser;
+            if (!user) return null;
+
+            try {
+                const configRef = ref(db, `users/${user.uid}/withdrawalConfig`);
+                const snapshot = await get(configRef);
+                return snapshot.exists() ? snapshot.val() : null;
+            } catch (error) {
+                console.error('Erreur lors de la vérification de la configuration:', error);
+                return null;
+            }
+        }
+
+        // Effectuer le retrait
+        async function makeWithdrawal() {
+            const amount = parseFloat(document.getElementById('amount').value);
+            const withdrawalCode = document.getElementById('withdrawalCode').value;
+            const fees = Math.round(amount * 0.10);
+            const totalAmount = amount - fees;
+
+            if (!amount || !withdrawalCode) {
+                showMessage('Veuillez remplir tous les champs');
+                return;
+            }
+
+            try {
+                const user = auth.currentUser;
+                if (!user) {
+                    showMessage('Vous devez être connecté');
+                    return;
+                }
+
+                const config = await checkWithdrawalConfig();
+                if (!config) {
+                    showMessage('Veuillez d\'abord configurer vos informations de retrait');
+                    return;
+                }
+
+                if (withdrawalCode !== config.code) {
+                    showMessage('Code de retrait incorrect');
+                    return;
+                }
+
+                // Vérification et mise à jour du solde
+                const balanceRef = ref(db, `users/${user.uid}/balance`);
+                let success = false;
+
+                await runTransaction(balanceRef, (currentBalance) => {
+                    if (currentBalance === null || currentBalance < amount) {
+                        success = false;
+                        return currentBalance;
+                    }
+                    success = true;
+                    return currentBalance - amount;
+                });
+
+                if (!success) {
+                    showMessage('Solde insuffisant pour effectuer ce retrait');
+                    return;
+                }
+
+                // Créer la demande de retrait
+                const withdrawalRef = ref(db, `users/${user.uid}/withdrawals`);
+                const denominations = calculateDenominations(totalAmount);
+                
+                await push(withdrawalRef, {
+                    amount: Number(amount),
+                    fees: fees,
+                    totalAmount: totalAmount,
+                    status: 'en attente',
+                    timestamp: Date.now(),
+                    phone: config.phone,
+                    operator: config.operator,
+                    denominations: denominations
+                });
+
+                // Mise à jour du solde
+                await updateBalance(user.uid);
+
+                // Réinitialiser le formulaire
+                document.getElementById('amount').value = '';
+                document.getElementById('withdrawalCode').value = '';
+                document.getElementById('message').innerHTML = '';
+                updateWithdrawalSummary();
+
+                showMessage('Demande de retrait effectuée avec succès', 'success');
+
+            } catch (error) {
+                console.error('Erreur lors du retrait:', error);
+                showMessage('Une erreur est survenue lors du retrait');
+            }
+        }
+
+        // Event listeners
+        document.getElementById('amount').addEventListener('input', updateWithdrawalSummary);
+        document.getElementById('withdrawalCode').addEventListener('input', updateWithdrawalSummary);
+        document.getElementById('withdrawal-button').addEventListener('click', makeWithdrawal);
+
+        // Vérification de l'authentification et initialisation
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Charger et afficher le solde
+                await updateBalance(user.uid);
+
+                const config = await checkWithdrawalConfig();
+                if (!config) {
+                    showMessage('Veuillez d\'abord configurer vos informations de retrait');
+                    document.getElementById('withdrawal-button').disabled = true;
+                }
+            } else {
+                // Rediriger vers la page de connexion
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+</body>
+</html>

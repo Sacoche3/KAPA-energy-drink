@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration Retrait</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': {
+                            '50': '#eef2ff',
+                            '100': '#e0e7ff',
+                            '200': '#c7d2fe',
+                            '300': '#a5b4fc',
+                            '400': '#818cf8',
+                            '500': '#6366f1',
+                            '600': '#4f46e5',
+                            '700': '#4338ca',
+                            '800': '#3730a3',
+                            '900': '#312e81'
+                        }
+                    },
+                    animation: {
+                        'gradient': 'gradient 8s linear infinite',
+                    },
+                    keyframes: {
+                        gradient: {
+                            '0%, 100%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'left center'
+                            },
+                            '50%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'right center'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(45deg, #4f46e5, #818cf8, #4338ca);
+            background-size: 200% 200%;
+            animation: gradient 8s ease infinite;
+        }
+        
+        .input-focus-effect:focus {
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .operator-icon {
+            transition: all 0.3s ease;
+        }
+        
+        select:focus + .operator-icon {
+            transform: rotate(180deg);
+        }
+        
+        .submit-button {
+            transition: all 0.3s ease;
+        }
+        
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 bg-gray-50">
+    <div class="w-full max-w-md">
+        <div class="bg-white rounded-2xl shadow-2xl overflow-hidden transform transition-all hover:shadow-3xl">
+            <div class="gradient-bg p-8 text-white relative overflow-hidden">
+                <div class="relative z-10">
+                    <h1 class="text-3xl font-bold mb-2">Configuration Retrait</h1>
+                    <p class="text-primary-100 opacity-90">Configurez vos préférences de retrait en toute sécurité</p>
+                </div>
+                <div class="absolute top-0 right-0 p-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="p-8 space-y-6">
+                <div class="space-y-2">
+                    <label for="phone" class="block text-sm font-medium text-gray-700">Numéro de téléphone</label>
+                    <div class="relative">
+                        <input 
+                            type="tel" 
+                            id="phone" 
+                            class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary-500 focus:ring-0 input-focus-effect transition-all duration-300"
+                            placeholder="Ex: +225 0123456789"
+                            required
+                        >
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label for="operator" class="block text-sm font-medium text-gray-700">Opérateur</label>
+                    <div class="relative">
+                        <select 
+                            id="operator" 
+                            class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary-500 focus:ring-0 input-focus-effect transition-all duration-300 appearance-none"
+                            required
+                        >
+                            <option value="">Sélectionnez un opérateur</option>
+                            <option value="orange">Orange Money</option>
+                            <option value="mtn">MTN Mobile Money</option>
+                            <option value="moov">Moov Money</option>
+                            <option value="wave">WAVE</option>
+                            <option value="usdt">USDT TRON 20</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 operator-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label for="code" class="block text-sm font-medium text-gray-700">Code de retrait</label>
+                    <div class="relative">
+                        <input 
+                            type="password" 
+                            id="code" 
+                            class="block w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-primary-500 focus:ring-0 input-focus-effect transition-all duration-300"
+                            placeholder="Entrez votre code secret"
+                            required
+                        >
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <button 
+                    onclick="setupWithdrawal()" 
+                    class="submit-button w-full bg-primary-600 text-white py-4 rounded-lg font-medium tracking-wide transition-all duration-300"
+                >
+                    Configurer le retrait
+                </button>
+
+                <div id="message" class="text-center text-sm"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { 
+            initializeApp 
+        } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+        
+        import { 
+            getAuth, 
+            onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+        
+        import { 
+            getDatabase, 
+            ref, 
+            set 
+        } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCekNaQs88vn7Ed2IIO_fIrc3kk2lVfggM",
+            authDomain: "uber-10bff.firebaseapp.com",
+            databaseURL: "https://uber-10bff-default-rtdb.firebaseio.com",
+            projectId: "uber-10bff",
+            storageBucket: "uber-10bff.firebasestorage.app",
+            messagingSenderId: "997089945771",
+            appId: "1:997089945771:web:55496eb4fb702eabce2fee"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        const auth = getAuth();
+
+        // Fonction de configuration du retrait
+        window.setupWithdrawal = async function() {
+            const phone = document.getElementById('phone').value;
+            const operator = document.getElementById('operator').value;
+            const code = document.getElementById('code').value;
+
+            // Validation des champs
+            if (!phone || !operator || !code) {
+                showMessage('Veuillez remplir tous les champs', 'error');
+                return;
+            }
+
+            try {
+                const user = auth.currentUser;
+                if (!user) {
+                    showMessage('Vous devez être connecté', 'error');
+                    return;
+                }
+
+                // Animation du bouton
+                gsap.to('.submit-button', {
+                    scale: 0.95,
+                    duration: 0.1,
+                    yoyo: true,
+                    repeat: 1
+                });
+
+                // Enregistrement de la configuration
+                await set(ref(db, `users/${user.uid}/withdrawalConfig`), {
+                    phone,
+                    operator,
+                    code,
+                    configuredAt: Date.now()
+                });
+
+                showMessage('Configuration enregistrée avec succès!', 'success');
+                
+                // Redirection après succès
+                setTimeout(() => {
+                    window.location.href = 'carte.html';
+                }, 2000);
+            } catch (error) {
+                showMessage(`Erreur: ${error.message}`, 'error');
+            }
+        };
+
+        // Fonction d'affichage des messages
+        window.showMessage = function(text, type) {
+            const messageEl = document.getElementById('message');
+            messageEl.innerHTML = `
+                <div class="mt-4 p-4 rounded-lg ${type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}">
+                    ${text}
+                </div>
+            `;
+            
+            gsap.from(messageEl, {
+                duration: 0.3,
+                y: 10,
+                opacity: 0,
+                ease: 'power2.out'
+            });
+        };
+
+        // Vérification de l'authentification
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = 'retrait.html';
+            }
+        });
+
+        // Animations d'entrée
+        document.addEventListener('DOMContentLoaded', () => {
+            gsap.from('.gradient-bg', {
+                duration: 1,
+                y: -50,
+                opacity: 0,
+                ease: 'power3.out'
+            });
+            
+            gsap.from('input, select', {
+                duration: 0.8,
+                y: 20,
+                opacity: 0,
+                stagger: 0.1,
+                ease: 'power2.out'
+            });
+        });
+    </script>
+</body>
+</html>

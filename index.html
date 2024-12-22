@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Kapa Energy Drink - Connexion</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Reset et styles de base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Écran de chargement */
+        .loader-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .loader {
+            width: 80px;
+            height: 80px;
+            border: 5px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        .loader-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        /* Conteneur principal */
+        .container {
+            opacity: 0;
+            max-width: 480px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            transition: opacity 0.5s ease-in;
+        }
+
+        /* Logo et branding */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 15px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .logo-text {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Onglets */
+        .tab-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 12px;
+            font-size: 16px;
+            color: white;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tab-button.active {
+            border-bottom-color: white;
+            font-weight: 600;
+        }
+
+        /* Formulaires */
+        .form-container form {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .form-container form.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Champs de saisie */
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 45px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            color: white;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            background: rgba(255,255,255,0.25);
+            border-color: rgba(255,255,255,0.5);
+            outline: none;
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.7);
+            font-size: 18px;
+        }
+
+        /* Boutons */
+        button[type="submit"] {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        button[type="submit"]:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        button[type="submit"] i {
+            margin-right: 10px;
+        }
+
+        /* Messages */
+        .error-message, .success-message {
+            text-align: center;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .error-message {
+            background: rgba(255,82,82,0.2);
+            color: #ff5252;
+        }
+
+        .success-message {
+            background: rgba(76,175,80,0.2);
+            color: #4caf50;
+        }
+
+        /* Animations */
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .logo {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Écran de chargement -->
+    <div class="loader-wrapper">
+        <div class="loader"></div>
+        <div class="loader-text">Chargement...</div>
+    </div>
+
+    <!-- Conteneur principal -->
+    <div class="container">
+        <div class="logo-container">
+            <svg class="logo" viewBox="0 0 100 100">
+                <path fill="white" d="M20,20 L40,20 L40,80 L20,80 Z M60,20 L80,20 L60,50 L80,80 L60,80 L40,50 Z"/>
+            </svg>
+            <div class="logo-text">Kapa Energy Drink</div>
+        </div>
+
+        <!-- Onglets -->
+        <div class="tab-buttons">
+            <button type="button" class="tab-button active" onclick="showForm('login')">Connexion</button>
+            <button type="button" class="tab-button" onclick="showForm('signup')">Inscription</button>
+        </div>
+
+        <!-- Formulaires -->
+        <div class="form-container">
+            <!-- Connexion -->
+            <form id="loginFormData" class="active">
+                <div class="input-group">
+                    <i class="fas fa-phone"></i>
+                    <input type="tel" id="loginTelephone" placeholder="Numéro de téléphone" required />
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="loginPassword" placeholder="Mot de passe" required />
+                </div>
+                <p class="error-message" id="loginError"></p>
+                <button type="submit">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Se connecter
+                </button>
+            </form>
+
+            <!-- Inscription -->
+            <form id="signupFormData">
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="signupUsername" placeholder="Nom d'utilisateur" required />
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-phone"></i>
+                    <input type="tel" id="signupTelephone" placeholder="Numéro de téléphone" required />
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="signupPassword" placeholder="Mot de passe" required />
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="confirmPassword" placeholder="Confirmer le mot de passe" required />
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-ticket"></i>
+                    <input type="text" id="referralCode" placeholder="Code de parrainage (optionnel)" />
+                </div>
+                <p class="error-message" id="signupError"></p>
+                <p class="success-message" id="signupSuccess"></p>
+                <button type="submit">
+                    <i class="fas fa-user-plus"></i>
+                    S'inscrire
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Gestion de l'écran de chargement
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.querySelector('.loader-wrapper');
+                const container = document.querySelector('.container');
+                
+                loader.style.opacity = '0';
+                container.style.opacity = '1';
+                
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }, 2000);
+        });
+
+        // Gestion des onglets
+        function showForm(formType) {
+            const forms = {
+                login: document.getElementById('loginFormData'),
+                signup: document.getElementById('signupFormData')
+            };
+            const tabs = document.querySelectorAll('.tab-button');
+            
+            // Réinitialiser les messages
+            document.querySelectorAll('.error-message, .success-message')
+                .forEach(msg => msg.style.display = 'none');
+
+            // Activer/désactiver les formulaires
+            Object.keys(forms).forEach(key => {
+                forms[key].classList.toggle('active', key === formType);
+            });
+
+            // Mettre à jour les onglets
+            tabs.forEach((tab, index) => {
+                tab.classList.toggle('active', 
+                    (formType === 'login' &&  index === 0) || 
+                    (formType === 'signup' &&  index === 1)
+                );
+            });
+        }
+    </script>
+
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword 
+        } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+        import { 
+            getDatabase, 
+            ref, 
+            set, 
+            get 
+        } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
+
+        // Configuration Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCekNaQs88vn7Ed2IIO_fIrc3kk2lVfggM",
+            authDomain: "uber-10bff.firebaseapp.com",
+            databaseURL: "https://uber-10bff-default-rtdb.firebaseio.com",
+            projectId: "uber-10bff",
+            storageBucket: "uber-10bff.firebasestorage.app",
+            messagingSenderId: "997089945771",
+            appId: "1:997089945771:web:55496eb4fb702eabce2fee"
+        };
+
+        // Initialisation Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const database = getDatabase(app);
+
+        // Fonctions utilitaires
+        function generateReferralCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            return Array.from(
+                { length: 6 }, 
+                () => chars.charAt(Math.floor(Math.random() * chars.length))
+            ).join('');
+        }
+
+        async function checkReferralCode(code) {
+            if (!code) return null;
+            try {
+                const snapshot = await get(ref(database, 'referralCodes/' + code));
+                return snapshot.exists() ? snapshot.val() : null;
+            } catch (error) {
+                console.error("Erreur de vérification du code:", error);
+                return null;
+            }
+        }
+
+        async function registerReferralCode(userId, code) {
+            try {
+                await set(ref(database, 'referralCodes/' + code), {
+                    userId,
+                    createdAt: Date.now()
+                });
+                return true;
+            } catch (error) {
+                console.error("Erreur d'enregistrement du code:", error);
+                return false;
+            }
+        }
+
+        async function updateUserBalance(userId, amount) {
+            try {
+                const userRef = ref(database, 'users/' + userId);
+                const snapshot = await get(userRef);
+                if (snapshot.exists()) {
+                    const currentBalance = snapshot.val().balance || 0;
+                    await set(ref(database, 'users/' + userId + '/balance'), 
+                        currentBalance + amount);
+                }
+            } catch (error) {
+                console.error("Erreur de mise à jour du solde:", error);
+            }
+        }
+
+        // Gestion de l'inscription
+        document.getElementById("signupFormData")
+            .addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const errorElement = document.getElementById("signupError");
+            const successElement = document.getElementById("signupSuccess");
+            
+            errorElement.style.display = 'none';
+            successElement.style.display = 'none';
+
+            try {
+                const username = document.getElementById("signupUsername").value;
+                const telephone = document.getElementById("signupTelephone").value;
+                const email = `${telephone}@temp.com`;
+                const password = document.getElementById("signupPassword").value;
+                const confirmPassword = document.getElementById("confirmPassword").value;
+                const referralCode = document.getElementById("referralCode").value;
+
+                // Vérification des mots de passe
+                if (password !== confirmPassword) {
+                    throw new Error("Les mots de passe ne correspondent pas");
+                }
+
+                // Vérification du code de parrainage
+                let referrerData = null;
+                if (referralCode) {
+                    referrerData = await checkReferralCode(referralCode);
+                    if (!referrerData) {
+                        throw new Error("Code de parrainage invalide");
+                    }
+                }
+
+                // Création du compte
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                const newReferralCode = generateReferralCode();
+
+                // Enregistrement des données utilisateur
+                await set(ref(database, 'users/' + user.uid), {
+                    username,
+                    email,
+                    phoneNumber: telephone,
+                    balance: 0,
+                    referralCode: newReferralCode,
+                    referredBy: referrerData?.userId || null,
+                    createdAt: Date.now()
+                });
+
+                // Enregistrement du nouveau code de parrainage
+                await registerReferralCode(user.uid, newReferralCode);
+
+                // Mise à jour des soldes si parrainage
+                if (referrerData) {
+                    await updateUserBalance(referrerData.userId, 0);
+                    await updateUserBalance(user.uid, 0);
+                }
+
+                // Affichage du succès et redirection
+                successElement.textContent = "Compte créé avec succès !";
+                successElement.style.display = 'block';
+                setTimeout(() => {
+                    window.location.href = "solde.html";
+                }, 1500);
+                
+            } catch (error) {
+                errorElement.textContent = error.message;
+                errorElement.style.display = 'block';
+            }
+        });
+
+        // Gestion de la connexion
+        document.getElementById("loginFormData")
+            .addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const errorElement = document.getElementById("loginError");
+            errorElement.style.display = 'none';
+
+            try {
+                const telephone = document.getElementById("loginTelephone").value;
+                const email = `${telephone}@temp.com`;
+                const password = document.getElementById("loginPassword").value;
+
+                await signInWithEmailAndPassword(auth, email, password);
+                window.location.href = "solde.html";
+            } catch (error) {
+                errorElement.textContent = "Numéro ou mot de passe incorrect";
+                errorElement.style.display = 'block';
+            }
+        });
+
+        // Gestion du code de parrainage dans l'URL
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const referralCode = urlParams.get('ref');
+            
+            if (referralCode) {
+                const referralCodeInput = document.getElementById('referralCode');
+                if (referralCodeInput) {
+                    referralCodeInput.value = referralCode;
+                }
+            }
+        });
+
+        // Gestion de l'état d'authentification
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                if (window.location.pathname.includes('solde.html')) {
+                    displayUserReferralCode();
+                    generateReferralLink();
+                }
+            } else {
+                if (!window.location.pathname.includes('index.html')) {
+                    window.location.href = 'index.html';
+                }
+            }
+        });
+
+        // Fonctions de gestion du code de parrainage
+        async function displayUserReferralCode() {
+            try {
+                const user = auth.currentUser;
+                if (user) {
+                    const snapshot = await get(ref(database, 'users/' + user.uid));
+                    
+                    if (snapshot.exists()) {
+                        const userData = snapshot.val();
+                        const referralCodeElement = document.getElementById('userReferralCode');
+                        
+                        if (referralCodeElement) {
+                            referralCodeElement.textContent = userData.referralCode;
+                            
+                            // Configuration du bouton de copie
+                            const copyButton = document.getElementById('copyReferralCodeBtn');
+                            if (copyButton) {
+                                copyButton.addEventListener('click', () => {
+                                    navigator.clipboard.writeText(userData.referralCode)
+                                        .then(() => alert('Code de parrainage copié !'))
+                                        .catch(err => console.error('Erreur de copie:', err));
+                                });
+                            }
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error("Erreur lors de la récupération du code:", error);
+            }
+        }
+
+        function generateReferralLink() {
+            const user = auth.currentUser;
+            if (user) {
+                get(ref(database, 'users/' + user.uid)).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const referralCode = snapshot.val().referralCode;
+                        const referralLink = `${window.location.origin}/index.html?ref=${referralCode}`;
+                        
+                        const referralLinkElement = document.getElementById('referralLink');
+                        if (referralLinkElement) {
+                            referralLinkElement.value = referralLink;
+                            
+                            // Configuration du bouton de copie du lien
+                            const copyLinkButton = document.getElementById('copyReferralLinkBtn');
+                            if (copyLinkButton) {
+                                copyLinkButton.addEventListener('click', () => {
+                                    navigator.clipboard.writeText(referralLink)
+                                        .then(() => alert('Lien de parrainage copié !'))
+                                        .catch(err => console.error('Erreur de copie:', err));
+                                });
+                            }
+                        }
+                    }
+                }).catch(error => {
+                    console.error("Erreur de génération du lien:", error);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

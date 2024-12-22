@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration de Retrait</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #f0f2f5;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #000428 0%, #004e92 100%);
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 0.3s ease;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(125deg, 
+                transparent 0%,
+                rgba(255, 255, 255, 0.1) 10%,
+                rgba(255, 255, 255, 0.1) 20%,
+                transparent 30%
+            );
+            opacity: 0.3;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover::before {
+            opacity: 0.5;
+        }
+
+        .chip {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4a 100%);
+        }
+
+        .wireless {
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .number-group {
+            letter-spacing: 0.3em;
+        }
+
+        .skeleton {
+            animation: skeleton-loading 1s linear infinite alternate;
+        }
+
+        @keyframes skeleton-loading {
+            0% {
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+            100% {
+                background-color: rgba(255, 255, 255, 0.3);
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-gray-100 to-gray-200">
+    <div class="container max-w-md mx-auto">
+        <!-- État de chargement -->
+        <div id="loadingState" class="hidden text-center mb-4">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
+        </div>
+
+        <!-- Message d'erreur -->
+        <div id="errorState" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+            <span class="block sm:inline" id="errorMessage">Une erreur est survenue.</span>
+        </div>
+
+        <!-- Carte style bancaire -->
+        <div class="card w-full aspect-[1.586/1] rounded-3xl p-8 shadow-2xl mb-8 hover:shadow-[0_20px_50px_rgba(8,_112,_184,_0.7)] transition-all duration-300">
+            <div class="relative h-full flex flex-col justify-between">
+                <!-- En-tête de la carte -->
+                <div class="flex justify-between items-start">
+                    <div class="flex space-x-4 items-center">
+                        <div class="chip w-12 h-8 rounded-md"></div>
+                        <div class="wireless w-6 h-6 opacity-50"></div>
+                    </div>
+                    <div class="text-white text-xl font-bold" id="operator">
+                        <span class="skeleton rounded h-6 w-32 inline-block">Loading...</span>
+                    </div>
+                </div>
+
+                <!-- Numéro -->
+                <div class="text-white">
+                    <div class="mb-2 text-sm opacity-70">Numéro de téléphone</div>
+                    <div class="number-group text-2xl font-bold tracking-widest" id="phoneNumber">
+                        <span class="skeleton rounded h-8 w-full inline-block">Loading...</span>
+                    </div>
+                </div>
+
+                <!-- Pied de la carte -->
+                <div class="flex justify-between items-end">
+                    <div class="text-white">
+                        <div class="text-sm opacity-70">Titulaire</div>
+                        <div class="font-medium" id="userName">
+                            <span class="skeleton rounded h-6 w-32 inline-block">Loading...</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="text-white opacity-70 text-sm">Validité</div>
+                        <div class="text-white font-medium" id="validity"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bouton de configuration -->
+        <a href="portefeuille.html" class="block w-full bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white px-6 py-4 rounded-2xl font-medium text-center transition-all duration-300 transform hover:-translate-y-1 shadow-lg hover:shadow-xl">
+            Modifier les informations
+        </a>
+    </div>
+
+    <script type="module">
+        import { 
+            initializeApp 
+        } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+        
+        import { 
+            getAuth, 
+            onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+        
+        import { 
+            getDatabase, 
+            ref, 
+            get 
+        } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCekNaQs88vn7Ed2IIO_fIrc3kk2lVfggM",
+            authDomain: "uber-10bff.firebaseapp.com",
+            databaseURL: "https://uber-10bff-default-rtdb.firebaseio.com",
+            projectId: "uber-10bff",
+            storageBucket: "uber-10bff.firebasestorage.app",
+            messagingSenderId: "997089945771",
+            appId: "1:997089945771:web:55496eb4fb702eabce2fee"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        const auth = getAuth();
+
+        // Fonction pour formater le numéro de téléphone
+        function formatPhoneNumber(phone) {
+            if (!phone) return '';
+            // Supprime tous les caractères non numériques
+            const cleaned = phone.replace(/\D/g, '');
+            // Format: +XXX XXXX XXXX XX
+            return `+${cleaned.slice(0, 3)} ${cleaned.slice(3, 7)} ${cleaned.slice(7, 11)} ${cleaned.slice(11)}`;
+        }
+
+        // Gérer les états de l'interface
+        function showLoading(show) {
+            document.getElementById('loadingState').style.display = show ? 'block' : 'none';
+        }
+
+        function showError(message) {
+            const errorState = document.getElementById('errorState');
+            const errorMessage = document.getElementById('errorMessage');
+            errorState.style.display = 'block';
+            errorMessage.textContent = message;
+        }
+
+        async function loadWithdrawalConfig(user) {
+            try {
+                showLoading(true);
+                
+                // Charger les données utilisateur
+                const userRef = ref(db, `users/${user.uid}`);
+                const userSnapshot = await get(userRef);
+                
+                if (userSnapshot.exists()) {
+                    const userData = userSnapshot.val();
+                    
+                    // Charger la configuration de retrait
+                    const withdrawalConfigRef = ref(db, `users/${user.uid}/withdrawalConfig`);
+                    const withdrawalSnapshot = await get(withdrawalConfigRef);
+                    
+                    if (withdrawalSnapshot.exists()) {
+                        const config = withdrawalSnapshot.val();
+                        
+                        // Mettre à jour l'interface
+                        document.getElementById('phoneNumber').textContent = formatPhoneNumber(config.phone);
+                        document.getElementById('operator').textContent = config.operator?.charAt(0).toUpperCase() + config.operator?.slice(1) + ' Money';
+                        document.getElementById('userName').textContent = userData.name || 'NON CONFIGURÉ';
+                        
+                        // Ajouter une date de validité (exemple: date actuelle + 3 ans)
+                        const validity = new Date();
+                        validity.setFullYear(validity.getFullYear() + 3);
+                        document.getElementById('validity').textContent = `${validity.getMonth() + 1}/${validity.getFullYear().toString().slice(-2)}`;
+                    }
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                showError('Impossible de charger vos informations. Veuillez réessayer.');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Animation de la carte
+        const card = document.querySelector('.card');
+        document.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateY = (x - centerX) / 20;
+            const rotateX = (centerY - y) / 20;
+
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+        });
+
+        // Gérer l'état de l'authentification
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loadWithdrawalConfig(user);
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+</body>
+</html>

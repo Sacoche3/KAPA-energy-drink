@@ -3,235 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Investir</title>
+    <title>Kapa Energy Drink - Investissements</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
-            background: linear-gradient(to right, #000428, #004e92);
+            background: linear-gradient(135deg, #1a1a1a, #2d3436);
             min-height: 100vh;
-            padding: 20px;
-            color: #fff;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            z-index: 0;
+            color: #ffffff;
+            line-height: 1.6;
         }
 
         .navbar {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
-            padding: 25px;
-            border-radius: 20px;
-            margin-bottom: 30px;
-            text-align: center;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            position: relative;
-            overflow: hidden;
+            padding: 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .navbar::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                45deg,
-                transparent,
-                rgba(255, 215, 0, 0.1),
-                transparent
-            );
-            transform: rotate(45deg);
-            animation: shine 3s infinite;
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        @keyframes shine {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) rotate(45deg); }
-        }
-
-        .navbar {
-            font-size: 28px;
+        .logo {
+            font-size: 1.8rem;
             font-weight: 700;
-            background: linear-gradient(45deg, #FFD700, #FFA500);
+            background: linear-gradient(45deg, #00f2fe, #4facfe);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-transform: uppercase;
-            letter-spacing: 2px;
         }
 
-        .balance {
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            padding: 30px;
-            border-radius: 20px;
+        .balance-card {
+            background: rgba(255, 255, 255, 0.05);
+            margin: 2rem auto;
+            max-width: 1200px;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
-            margin-bottom: 40px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            transform-style: preserve-3d;
-            transition: transform 0.5s ease;
-        }
-
-        .balance:hover {
-            transform: translateY(-10px) rotateX(5deg);
         }
 
         #userBalance {
-            font-size: 32px;
-            font-weight: bold;
-            background: linear-gradient(45deg, #FFD700, #FFA500);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #4facfe;
             display: block;
-            margin-top: 10px;
+            margin-top: 0.5rem;
         }
 
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 30px;
-            padding: 20px;
-            position: relative;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .product-card {
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            border-radius: 25px;
-            padding: 25px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            text-align: center;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
         }
 
         .product-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-            border-color: rgba(255, 215, 0, 0.6);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: #4facfe;
         }
 
-        .product-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(
-                45deg,
-                transparent,
-                rgba(255, 215, 0, 0.1),
-                transparent
-            );
-            transform: translateX(-100%);
-            transition: 0.5s;
-        }
-
-        .product-card:hover::after {
-            transform: translateX(100%);
-        }
-
-        .product-card img {
+        .product-image {
             width: 100%;
-            height: 220px;
-            object-fit: cover;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            border: 2px solid rgba(255, 215, 0, 0.3);
-            transition: transform 0.5s ease;
+            height: 200px;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
         }
 
-        .product-card:hover img {
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image img {
             transform: scale(1.05);
         }
 
+        .product-info {
+            padding: 1rem 0;
+        }
+
+        .product-info h3 {
+            font-size: 1.2rem;
+            color: #4facfe;
+            margin-bottom: 1rem;
+        }
+
+        .product-info p {
+            display: flex;
+            align-items: center;
+            margin: 0.8rem 0;
+            color: #ffffff;
+        }
+
+        .product-info i {
+            margin-right: 0.5rem;
+            color: #4facfe;
+            width: 20px;
+            text-align: center;
+        }
+
         .invest-button {
-            background: linear-gradient(45deg, #FFD700, #FFA500);
-            color: #000;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            margin-top: 20px;
-            font-weight: 700;
-            font-size: 16px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .invest-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
             width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                120deg,
-                transparent,
-                rgba(255, 255, 255, 0.4),
-                transparent
-            );
-            transition: 0.5s;
-        }
-
-        .invest-button:hover::before {
-            left: 100%;
+            padding: 1rem;
+            background: linear-gradient(45deg, #00f2fe, #4facfe);
+            border: none;
+            border-radius: 0.5rem;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
         .invest-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(0, 242, 254, 0.3);
         }
 
         .invest-button:disabled {
-            background: linear-gradient(45deg, #808080, #A9A9A9);
+            background: #666;
             cursor: not-allowed;
-            transform: none;
         }
 
         .error-message {
-            background: rgba(255, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            color: #fff;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
-            border: 1px solid rgba(255, 0, 0, 0.3);
-            text-align: center;
-            animation: slideIn 0.5s ease;
-            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.2);
+            background: rgba(255, 59, 48, 0.1);
+            border-left: 4px solid #ff3b30;
+            padding: 1rem;
+            margin: 1rem auto;
+            max-width: 1200px;
+            border-radius: 0.5rem;
+            display: none;
+            animation: slideIn 0.3s ease;
         }
 
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(-20px);
+                transform: translateY(-10px);
             }
             to {
                 opacity: 1;
@@ -239,70 +184,55 @@
             }
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(45deg, #FFD700, #FFA500);
-            border-radius: 5px;
-        }
-
-        /* Responsive Design */
         @media (max-width: 768px) {
-            body {
-                padding: 15px;
-            }
-
             .products-grid {
                 grid-template-columns: 1fr;
-                gap: 20px;
-                padding: 10px;
+                padding: 1rem;
             }
 
             .navbar {
-                font-size: 24px;
-                padding: 20px;
+                padding: 1rem;
             }
 
-            .balance {
-                padding: 20px;
+            .logo {
+                font-size: 1.4rem;
             }
 
             #userBalance {
-                font-size: 28px;
+                font-size: 2rem;
             }
 
             .product-card {
-                padding: 20px;
-            }
-
-            .invest-button {
-                padding: 12px 25px;
+                margin: 0 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="navbar">kapa energy drink</div>
-    <div class="balance">
-        Votre solde : <span id="userBalance">0 XOF</span>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="logo">Kapa Energy Drink</div>
+            <div class="user-info">
+                <i class="fas fa-user-circle fa-2x"></i>
+            </div>
+        </div>
+    </nav>
+
+    <div class="balance-card">
+        <h2>Votre Portefeuille</h2>
+        <span id="userBalance">0 XOF</span>
     </div>
+
     <div class="error-message" id="errorMessage"></div>
-    <div class="products" id="productsContainer"></div>
-    
+    <div class="products-grid" id="productsContainer"></div>
+
     <script type="module">
-        // Importation Firebase
+        // Import Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
         import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
 
-        // Configuration Firebase
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCekNaQs88vn7Ed2IIO_fIrc3kk2lVfggM",
             authDomain: "uber-10bff.firebaseapp.com",
@@ -313,127 +243,159 @@
             appId: "1:997089945771:web:55496eb4fb702eabce2fee"
         };
 
-        // Initialisation Firebase
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth();
         const db = getDatabase();
 
-        // Produits disponibles
-const cryptoOptions = [
-    {
-        id: 0,
-        name: "KAPA BOOSTER [1]",
-        price: 1500,
-        dailyReturn: 200,
-        cycle: 32,
-        totalReturn: 6400,
-        image: "https://image.noelshack.com/fichiers/2024/51/7/1734831210-images-10.jpeg",
-    },
-    {
-        id: 1,
-        name: "KAPA BOOSTER [2]",
-        price: 5000,
-        dailyReturn: 400,
-        cycle: 31,
-        totalReturn: 12400,
-        image: "https://image.noelshack.com/fichiers/2024/51/7/1734831518-images-11.jpeg",
-    },
-    {
-        id: 2,
-        name: "KAPA BOOSTER [3]",
-        price: 10000,
-        dailyReturn: 750,
-        cycle: 31,
-        totalReturn: 23250,
-        image: "https://image.noelshack.com/fichiers/2024/51/7/1734831772-images.png",
-    },
-    {
-        id: 3,
-        name: "KAPA BOOSTER [4]",
-        price: 19500,
-        dailyReturn: 950,
-        cycle: 32,
-        totalReturn: 30400,
-        image: "https://image.noelshack.com/fichiers/2024/51/7/1734831991-images-12.jpeg",
-    },
-    {
-        id: 4,
-        name: "KAPA BOOSTER [5]",
-        price: 31000,
-        dailyReturn: 1500,
-        cycle: 40,
-        totalReturn: 60000,
-        image: "https://image.noelshack.com/fichiers/2024/51/7/1734832844-images-13.jpeg",
-    },
-    {
-        id: 5,
-        name: "KAPA BOOSTER [6]",
-        price: 60000,
-        dailyReturn: 2000,
-        cycle: 50,
-        totalReturn: 100000,
-        image: "https://image.noelshack.com/fichiers/2024/51/7/1734833085-images-14.jpeg",
-    },
-    {
-        id: 6,
-        name: "KAPA BOOSTER [7]",
-        price: 100000,
-        dailyReturn: 4000,
-        cycle: 50,
-        totalReturn: 200000,
-        image: "https://image.noelshack.com/fichiers/2024/51/7/1734833260-1659cc75227694996edfedee430cb4a4-m.jpg",
-    },
-];
-        // Gestion des erreurs
-        function showError(message, timeout = 3000) {
+        // Products Data
+        const cryptoOptions = [
+            {
+                id: 0,
+                name: "KAPA BOOSTER [1]",
+                price: 10000,
+                dailyReturn: 624,
+                cycle: 365,
+                totalReturn: 227760,
+                image: "https://image.noelshack.com/fichiers/2024/51/7/1734831210-images-10.jpeg",
+            },
+            {
+                id: 1,
+                name: "KAPA BOOSTER [2]",
+                price: 20000,
+                dailyReturn: 1110,
+                cycle: 365,
+                totalReturn: 405105,
+                image: "https://image.noelshack.com/fichiers/2024/51/7/1734831518-images-11.jpeg",
+            },
+            {
+                id: 2,
+                name: "KAPA BOOSTER [3]",
+                price: 50000,
+                dailyReturn: 2499,
+                cycle: 365,
+                totalReturn: 912135,
+                image: "https://image.noelshack.com/fichiers/2024/51/7/1734831772-images.png",
+            },
+            {
+                id: 3,
+                name: "KAPA BOOSTER [4]",
+                price: 150000,
+                dailyReturn: 6818,
+                cycle: 365,
+                totalReturn: 2488570,
+                image: "https://image.noelshack.com/fichiers/2024/51/7/1734831991-images-12.jpeg",
+            },
+            {
+                id: 4,
+                name: "KAPA BOOSTER [5]",
+                price: 300000,
+                dailyReturn: 12499,
+                cycle: 365,
+                totalReturn: 4562135,
+                image: "https://image.noelshack.com/fichiers/2024/51/7/1734832844-images-13.jpeg",
+            },
+            {
+                id: 5,
+                name: "KAPA BOOSTER [6]",
+                price: 1000000,
+                dailyReturn: 41666,
+                cycle: 365,
+                totalReturn: 15208090,
+                image: "https://image.noelshack.com/fichiers/2024/51/7/1734833085-images-14.jpeg",
+            },
+            {
+                id: 6,
+                name: "KAPA BOOSTER [7]",
+                price: 20000000,
+                dailyReturn: 90908,
+                cycle: 365,
+                totalReturn: 33181420,
+                image: "https://image.noelshack.com/fichiers/2024/51/7/1734833260-1659cc75227694996edfedee430cb4a4-m.jpg",
+            },
+        ];
+
+        // Utility Functions
+        function formatNumber(number) {
+            return new Intl.NumberFormat('fr-FR').format(number);
+        }
+
+        function showError(message, isSuccess = false) {
             const errorMessage = document.getElementById("errorMessage");
             errorMessage.textContent = message;
             errorMessage.style.display = "block";
+            errorMessage.style.background = isSuccess ? "rgba(0, 255, 0, 0.1)" : "rgba(255, 59, 48, 0.1)";
+            errorMessage.style.borderLeftColor = isSuccess ? "#00ff00" : "#ff3b30";
+            
             setTimeout(() => {
                 errorMessage.style.display = "none";
-            }, timeout);
+            }, 3000);
         }
 
-        // Récupération des données utilisateur
+        // Database Functions
         async function getUserData(userId) {
             try {
-                const userRef = ref(db, `users/${userId}`);
-                const snapshot = await get(userRef);
+                const snapshot = await get(ref(db, `users/${userId}`));
                 return snapshot.exists() ? snapshot.val() : null;
             } catch (error) {
-                console.error("Erreur lors de la récupération des données utilisateur:", error);
+                console.error("Error fetching user data:", error);
                 return null;
             }
         }
 
-        // Mise à jour du solde utilisateur
         async function updateUserBalance(userId, newBalance) {
             try {
-                const balanceRef = ref(db, `users/${userId}/balance`);
-                await set(balanceRef, newBalance);
-                document.getElementById("userBalance").textContent = `${newBalance} XOF`;
+                await set(ref(db, `users/${userId}/balance`), newBalance);
+                document.getElementById("userBalance").textContent = `${formatNumber(newBalance)} XOF`;
             } catch (error) {
-                console.error("Erreur lors de la mise à jour du solde:", error);
+                console.error("Error updating balance:", error);
+                showError("Erreur lors de la mise à jour du solde");
             }
         }
 
-        // Fonction globale pour investir
+        // Product Card Creation
+        function createProductCard(product) {
+            return `
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="product-info">
+                        <h3><i class="fas fa-tag"></i> ${product.name}</h3>
+                        <p><i class="fas fa-money-bill-wave"></i> Prix: ${formatNumber(product.price)} XOF</p>
+                        <p><i class="fas fa-coins"></i> Retour quotidien: ${formatNumber(product.dailyReturn)} XOF</p>
+                        <p><i class="fas fa-clock"></i> Cycle: ${product.cycle} jours</p>
+                        <p><i class="fas fa-piggy-bank"></i> Retour total: ${formatNumber(product.totalReturn)} XOF</p>
+                        <button class="invest-button" onclick="investInProduct(${product.id})">
+                            <i class="fas fa-hand-holding-usd"></i>
+                            Investir
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Investment Function
         window.investInProduct = async function(productId) {
             const user = auth.currentUser;
             if (!user) {
-                showError("Veuillez vous connecter pour investir.");
+                showError("Veuillez vous connecter pour investir");
+                setTimeout(() => window.location.href = "login.html", 2000);
                 return;
             }
 
-            const product = cryptoOptions.find((p) => p.id === productId);
-            if (!product) return;
+            const product = cryptoOptions.find(p => p.id === productId);
+            if (!product) {
+                showError("Produit non trouvé");
+                return;
+            }
 
             try {
                 const userData = await getUserData(user.uid);
                 const currentBalance = userData?.balance || 0;
 
                 if (currentBalance < product.price) {
-                    showError("Solde insuffisant pour cet investissement.");
+                    showError("Solde insuffisant pour cet investissement");
                     return;
                 }
 
@@ -441,61 +403,86 @@ const cryptoOptions = [
                 const endDate = new Date();
                 endDate.setDate(endDate.getDate() + product.cycle);
 
-                // Enregistrement de l'investissement
                 await set(ref(db, `users/${user.uid}/products/${productId}`), {
                     ...product,
                     purchaseDate: purchaseDate.toISOString(),
                     endDate: endDate.toISOString(),
-                    status: "active",
+                    status: "active"
                 });
 
-                // Mise à jour du solde
-                const newBalance = currentBalance - product.price;
-                await updateUserBalance(user.uid, newBalance);
-
-                showError("✅ Investissement réussi !", 2000);
+                await updateUserBalance(user.uid, currentBalance - product.price);
+                showError("✅ Investissement réussi!", true);
+                
                 setTimeout(() => {
                     window.location.href = "products.html";
                 }, 2000);
             } catch (error) {
                 console.error("Erreur lors de l'investissement:", error);
-                showError("Une erreur est survenue.");
+                showError("Une erreur est survenue lors de l'investissement");
             }
         };
 
-        // Création des cartes produits
-        function createProductCard(product) {
-            return `
-                <div class="product-card">
-                    <img src="${product.image}" alt="${product.name}">
-                    <h3>${product.name}</h3>
-                    <p>💰 Prix : ${product.price} XOF</p>
-                    <p>📈 Retour quotidien : ${product.dailyReturn} XOF</p>
-                    <p>⏱️ Cycle : ${product.cycle} jours</p>
-                    <p>💎 Retour total : ${product.totalReturn} XOF</p>
-                    <button class="invest-button" onclick="investInProduct(${product.id})">Investir</button>
-                </div>
-            `;
-        }
-
-        // Initialisation
+        // Initialization Function
         async function initialize() {
+            // Create product cards
             const container = document.getElementById("productsContainer");
             container.innerHTML = cryptoOptions.map(createProductCard).join("");
 
+            // Auth state observer
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     const userData = await getUserData(user.uid);
                     if (userData) {
-                        document.getElementById("userBalance").textContent = `${userData.balance || 0} XOF`;
+                        document.getElementById("userBalance").textContent = `${formatNumber(userData.balance || 0)} XOF`;
                     }
                 } else {
                     window.location.href = "login.html";
                 }
             });
+
+            // Add scroll animation for products
+            const productCards = document.querySelectorAll('.product-card');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            productCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.5s ease';
+                observer.observe(card);
+            });
         }
 
+        // Start the application
         initialize();
+
+        // Error handling for images
+        document.addEventListener('error', function(e) {
+            if (e.target.tagName.toLowerCase() === 'img') {
+                e.target.src = 'https://via.placeholder.com/300x200?text=Image+non+disponible';
+            }
+        }, true);
+
+        // Add loading state to invest buttons
+        const investButtons = document.querySelectorAll('.invest-button');
+        investButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                this.disabled = true;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Traitement...';
+                setTimeout(() => {
+                    this.disabled = false;
+                    this.innerHTML = '<i class="fas fa-hand-holding-usd"></i> Investir';
+                }, 3000);
+            });
+        });
     </script>
 </body>
 </html>

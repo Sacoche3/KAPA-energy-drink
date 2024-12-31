@@ -192,14 +192,14 @@
                 </div>
                 <div class="operator" data-operator="USDT">
                     <img src="https://image.noelshack.com/fichiers/2024/47/3/1732066635-images-1.png" alt="USDT">
-                    <p>USDT</p>
+                    <p>USDT TROC 20</p>
                 </div>
             </div>
 
             <form id="rechargeForm">
                 <div class="form-group">
                     <label>Montant à recharger (Minimum 1500 XOF)</label>
-                    <input type="number" min="1500" class="input" id="amount" required placeholder="Entrez le montant">
+                    <input type="number" min="3000" class="input" id="amount" required placeholder="Entrez le montant">
                     <div class="error-message" id="amountError"></div>
                 </div>
 
@@ -231,8 +231,8 @@
                 return;
             }
 
-            if (amount < 1000) {
-                amountError.textContent = 'Le montant minimum est de 1000 FCFA';
+            if (amount < 3000) {
+                amountError.textContent = 'Le montant minimum est de 3000 FCFA';
                 return;
             }
 

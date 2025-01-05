@@ -3,291 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Service Client Dynamique</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Service Client - Solar Green</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-        :root {
-            --primary-color: #FF6B6B;
-            --secondary-color: #4ECDC4;
-            --gradient-1: linear-gradient(135deg, #FF6B6B 0%, #FFA7A7 100%);
-            --gradient-2: linear-gradient(45deg, #4ECDC4, #45B7D1);
-            --whatsapp-gradient: linear-gradient(45deg, #25D366, #128C7E);
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes train {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes smoke {
+            0% { transform: translateY(0) scale(1); opacity: 0.8; }
+            100% { transform: translateY(-20px) scale(1.5); opacity: 0; }
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #F6F8F9 0%, #E5EBEE 100%);
+            background-image: url('/api/placeholder/1920/1080');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            perspective: 1000px;
-            overflow-x: hidden;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-            100% {
-                transform: scale(1);
-            }
+            padding: 20px;
+            background-color: #f0f2f5;
         }
 
         .container {
-            background: white;
-            border-radius: 25px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-            padding: 50px;
-            max-width: 1000px;
             width: 100%;
-            position: relative;
-            overflow: hidden;
-            animation: fadeInUp 1s ease;
-            transform-style: preserve-3d;
-            transform: rotateX(10deg);
+            max-width: 1200px;
         }
 
-        .container::before {
-            content: '';
-            position: absolute;
-            top: -100px;
-            right: -100px;
-            width: 250px;
-            height: 250px;
-            background: var(--gradient-1);
-            border-radius: 50%;
-            opacity: 0.2;
-            z-index: -1;
+        .service-card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 30px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
         }
 
-        h1 {
-            color: var(--primary-color);
+        .title {
             text-align: center;
-            margin-bottom: 50px;
-            font-size: 3em;
-            font-weight: 700;
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 2rem;
             position: relative;
-            animation: pulse 3s infinite;
+            padding-bottom: 1rem;
         }
 
-        h1::after {
+        .title::after {
             content: '';
             position: absolute;
-            bottom: -10px;
+            bottom: 0;
             left: 50%;
             transform: translateX(-50%);
             width: 100px;
             height: 4px;
-            background: var(--primary-color);
+            background: linear-gradient(45deg, #0088cc, #29b6f6);
+            border-radius: 2px;
         }
 
-        .services {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
+        .train-container {
+            position: relative;
+            height: 100px;
+            margin: 2rem 0;
+            overflow: hidden;
         }
 
-        .service-card {
+        .train {
+            position: absolute;
+            animation: train 8s linear infinite;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .locomotive {
+            width: 80px;
+            height: 40px;
+            background: #333;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .smoke {
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            width: 10px;
+            height: 10px;
+            background: #666;
+            border-radius: 50%;
+            animation: smoke 2s infinite;
+        }
+
+        .hours {
+            text-align: center;
+            background: linear-gradient(45deg, #0088cc, #29b6f6);
+            color: white;
+            padding: 1.2rem 2rem;
+            border-radius: 20px;
+            margin: 2rem auto;
+            font-size: 1.2rem;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0,136,204,0.2);
+            max-width: 400px;
+        }
+
+        .contact-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 3rem 0;
+            position: relative;
+        }
+
+        .contact-card {
             background: white;
             border-radius: 20px;
-            padding: 30px;
+            padding: 2rem;
             text-align: center;
-            transition: all 0.5s ease;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            transform-style: preserve-3d;
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            flex: 0 0 30%;
         }
 
-        .service-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--gradient-2);
-            transform: scaleX(0);
-            transform-origin: right;
-            transition: transform 0.5s ease;
+        .contact-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
 
-        .service-card:hover::before {
-            transform: scaleX(1);
-            transform-origin: left;
-        }
-
-        .service-card:hover {
-            transform: translateY(-15px) rotateX(10deg);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-
-        .service-card i {
-            font-size: 50px;
-            margin-bottom: 20px;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            transition: transform 0.3s ease;
-        }
-
-        .service-card:hover i {
-            transform: scale(1.1) rotate(10deg);
-        }
-
-        .service-card h3 {
+        .contact-title {
+            font-size: 1.5rem;
             color: #333;
-            margin-bottom: 15px;
-            font-size: 1.4em;
-            transition: color 0.3s ease;
+            margin-bottom: 1.5rem;
         }
 
-        .service-card:hover h3 {
-            color: var(--primary-color);
-        }
-
-        .contact-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            flex-wrap: wrap;
-        }
-
-        .contact-btn {
-            display: flex;
+        .btn {
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
-            padding: 20px 40px;
-            border-radius: 50px;
+            width: 90px;
+            height: 90px;
             color: white;
-            font-size: 1.2em;
-            font-weight: 600;
+            border-radius: 50%;
+            font-size: 2.2rem;
+            margin: 1rem 0;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s ease;
+            transition: all 0.3s ease;
             text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
-        .contact-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: rgba(255,255,255,0.2);
-            transform: skewX(-45deg);
-            transition: all 0.5s ease;
+        .telegram-btn {
+            background: linear-gradient(45deg, #0088cc, #29b6f6);
         }
 
-        .contact-btn:hover::before {
-            left: 100%;
+        .whatsapp-btn {
+            background: linear-gradient(45deg, #25D366, #128C7E);
         }
 
-        .contact-btn:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        .btn:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
         }
 
-        .whatsapp {
-            background: var(--whatsapp-gradient);
-        }
-
-        .telegram {
-            background: linear-gradient(45deg, #0088cc, #0055a5);
-        }
-
-        .contact-btn i {
-            font-size: 28px;
+        .solar-description {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+            color: white;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            box-shadow: 0 4px 15px rgba(76,175,80,0.2);
         }
 
         @media (max-width: 768px) {
-            .container {
-                padding: 30px 15px;
-                transform: none;
+            .contact-container {
+                flex-direction: column;
+                gap: 2rem;
             }
 
-            h1 {
-                font-size: 2.5em;
+            .contact-card {
+                width: 100%;
             }
 
-            .services {
-                grid-template-columns: 1fr;
+            .service-card {
+                padding: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>✨ Service Client Dynamique ✨</h1>
-        
-        <div class="services">
-            <div class="service-card">
-                <i class="fas fa-clock"></i>
-                <h3>Disponible 8H00 A 19H00</h3>
-                <p>Notre équipe est là pour vous accompagner à chaque instant de votre journée avec un service rapide et efficace !</p>
-            </div>
-            
-            <div class="service-card">
-                <i class="fas fa-comments"></i>
-                <h3>Support Ultra-Rapide</h3>
-                <p>Réponse garantie en moins de 30 minutes. Nous mettons tout en œuvre pour votre satisfaction immédiate !</p>
-            </div>
-            
-            <div class="service-card">
-                <i class="fas fa-heart"></i>
-                <h3>Service 100% Personnalisé</h3>
-                <p>Des solutions sur mesure adaptées précisément à vos besoins et vos attentes individuelles.</p>
-            </div>
-        </div>
+        <div class="service-card">
+            <h1 class="title">Centre d'aide</h1>
 
-        <div class="contact-buttons">
-            <a href="https://t.me/lilith3013" target="_blank" class="contact-btn telegram">
-                <i class="fab fa-telegram"></i>
-                Service client 
-            </a>
-            
-            <a href="https://t.me/+Fxrsg2LH3bdhYWVk" target="_blank" class="contact-btn telegram">
-                <i class="fab fa-telegram"></i>
-                Groupe Télégramme 
-            </a>
+            <div class="hours">
+                <i class="far fa-clock"></i> Heures d'ouverture : 8H00 - 19H00
+            </div>
 
-            <!-- Nouveaux boutons WhatsApp -->
-            <a href="https://wa.me/qr/C2VFQ5NCZ3QAP1" target="_blank" class="contact-btn whatsapp">
-                <i class="fab fa-whatsapp"></i>
-                Service WhatsApp
-            </a>
+            <div class="train-container">
+                <div class="train">
+                    <div class="locomotive">
+                        <div class="smoke"></div>
+                    </div>
+                </div>
+            </div>
 
-            <a href="https://chat.whatsapp.com/LIwPsDUMf7FD8u4OLN456X" target="_blank" class="contact-btn whatsapp">
-                <i class="fab fa-whatsapp"></i>
-                Groupe WhatsApp
-            </a>
+            <div class="contact-container">
+                <div class="contact-card">
+                    <h2 class="contact-title">Assistance N°1</h2>
+                    <a href="https://t.me/SOLARGREENASSISTANTN1" class="btn telegram-btn">
+                        <i class="fab fa-telegram-plane"></i>
+                    </a>
+                    <p class="contact-description">
+                        Support MTN, Moov et USDT
+                    </p>
+                </div>
+
+                <div class="contact-card">
+                    <h2 class="contact-title">Groupe senior</h2>
+                    <a href="https://t.me/SOLARGreen5" class="btn whatsapp-btn">
+                        <i class="fab fa-telegram-plane"></i>
+                    </a>
+                    <p class="contact-description">
+                        Rejoignez notre groupe
+                    </p>
+                </div>
+
+                <div class="contact-card">
+                    <h2 class="contact-title">Assistance N°2</h2>
+                    <a href="https://t.me/assistancen17" class="btn telegram-btn">
+                        <i class="fab fa-telegram-plane"></i>
+                    </a>
+                    <p class="contact-description">
+                        Support Orange Wave
+                    </p>
+                </div>
+            </div>
+
+            <div class="solar-description">
+                <h3 style="margin-bottom: 1rem;">🌟 Solar Green - L'Énergie du Futur 🌟</h3>
+                Découvrez l'excellence en énergie solaire avec Solar Green. Nos panneaux solaires de qualité supérieure 
+                vous garantissent une production d'énergie optimale et durable. Avec plus de 1000 installations réussies 
+                et une garantie de 25 ans, nous sommes votre partenaire de confiance pour un avenir plus vert. 
+                Certifiés aux normes internationales, nous vous offrons des solutions écologiques et économiques 
+                pour votre transition énergétique.
+                <p style="margin-top: 1rem; font-weight: 600;">
+                    💚 Qualité Premium | ⚡ Performance Garantie | 🌍 Respect de l'Environnement
+                </p>
+            </div>
         </div>
     </div>
 </body>
